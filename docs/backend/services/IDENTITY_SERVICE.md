@@ -22,10 +22,12 @@ The Identity Service is the central authority for authentication and user manage
 - `GET /me`: Get current authenticated user details.
 
 ### User Routes (`/users`)
-- `GET /`: List users (Admin only).
-- `GET /:id`: Get specific user profile.
+- `GET /users/me`: Get current authenticated user details.
+- `GET /users/all`: List all users (Admin only).
+- `GET /users/super-admins`: List Super Admins (Support).
+- `GET /users/:id`: Get specific user profile.
 - `PUT /profile`: Update personal profile information.
-- `POST /avatar`: Upload a new profile picture.
+- `POST /profile/upload`: Upload a new profile picture.
 
 ## 💾 Model: User
 | Field | Type | Description |

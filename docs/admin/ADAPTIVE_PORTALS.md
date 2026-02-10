@@ -19,7 +19,8 @@ The portal used by gym owners and staff. It is designed to feel bespoke to their
 ### Core Features:
 - **Member Management**: Track check-ins, memberships, and squads.
 - **Content Management**: Create workout routines for their specific members.
-- **Messaging**: Direct communication with members.
+- **Support Messaging**: Direct communication with FitNexa Super Admins for platform assistance.
+- **Member Inbox**: Direct communication with gym members.
 
 ---
 

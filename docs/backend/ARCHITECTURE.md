@@ -23,10 +23,11 @@ The Gateway (Port 3000) acts as the single entry point. It handles:
 - **Cross-Component Auth**: (Future) Centralized token validation.
 
 ### 3. Shared Core Library (`@fitnexa/shared`)
-To avoid code duplication, common logic is moved to a local shared package:
-- **Middleware**: Error handling, correlation IDs, performance monitoring.
-- **Utils**: Logger factory (Winston), RabbitMQ transports.
-- **Types**: Shared interfaces for users, gyms, and events.
+To avoid code duplication, common logic is moved to a local shared package. It supports **sub-path exports** for granular imports:
+- **`@fitnexa/shared/types`**: Shared interfaces for users, gyms, and events.
+- **`@fitnexa/shared/api`**: Platform-agnostic API clients.
+- **`@fitnexa/shared/logger`**: Environment-aware logging (Console in browser, Winston in Node).
+- **`@fitnexa/shared/middleware`**: Error handling, correlation IDs, performance monitoring.
 
 ## 📡 Communication Patterns
 
