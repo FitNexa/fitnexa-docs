@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkfitnexa_docs=globalThis.webpackChunkfitnexa_docs||[]).push([[5901],{5901(e,a,s){s.d(a,{createTreemapServices:()=>c.d});var c=s(1633);s(7960)}}]);
