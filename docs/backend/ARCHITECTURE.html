@@ -5,7 +5,7 @@
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Backend Architecture Deep Dive | FitNexa Developers</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://FitNexa.github.io/fitnexa-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://FitNexa.github.io/fitnexa-docs/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://FitNexa.github.io/fitnexa-docs/docs/backend/ARCHITECTURE"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Backend Architecture Deep Dive | FitNexa Developers"><meta data-rh="true" name="description" content="The FitNexa backend is a distributed system designed for scalability, isolation, and observability."><meta data-rh="true" property="og:description" content="The FitNexa backend is a distributed system designed for scalability, isolation, and observability."><link data-rh="true" rel="icon" href="/fitnexa-docs/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://FitNexa.github.io/fitnexa-docs/docs/backend/ARCHITECTURE"><link data-rh="true" rel="alternate" href="https://FitNexa.github.io/fitnexa-docs/docs/backend/ARCHITECTURE" hreflang="en"><link data-rh="true" rel="alternate" href="https://FitNexa.github.io/fitnexa-docs/docs/backend/ARCHITECTURE" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Backend Architecture Deep Dive","item":"https://FitNexa.github.io/fitnexa-docs/docs/backend/ARCHITECTURE"}]}</script><link rel="alternate" type="application/rss+xml" href="/fitnexa-docs/blog/rss.xml" title="FitNexa Developers RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/fitnexa-docs/blog/atom.xml" title="FitNexa Developers Atom Feed"><link rel="stylesheet" href="/fitnexa-docs/assets/css/styles.353a480a.css">
-<script src="/fitnexa-docs/assets/js/runtime~main.afea26c4.js" defer="defer"></script>
+<script src="/fitnexa-docs/assets/js/runtime~main.a938ada5.js" defer="defer"></script>
 <script src="/fitnexa-docs/assets/js/main.a95f6cfb.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -35,11 +35,12 @@
 <li class=""><strong>Cross-Component Auth</strong>: (Future) Centralized token validation.</li>
 </ul>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-shared-core-library-fitnexashared">3. Shared Core Library (<code>@fitnexa/shared</code>)<a href="#3-shared-core-library-fitnexashared" class="hash-link" aria-label="Direct link to 3-shared-core-library-fitnexashared" title="Direct link to 3-shared-core-library-fitnexashared" translate="no">​</a></h3>
-<p>To avoid code duplication, common logic is moved to a local shared package:</p>
+<p>To avoid code duplication, common logic is moved to a local shared package. It supports <strong>sub-path exports</strong> for granular imports:</p>
 <ul>
-<li class=""><strong>Middleware</strong>: Error handling, correlation IDs, performance monitoring.</li>
-<li class=""><strong>Utils</strong>: Logger factory (Winston), RabbitMQ transports.</li>
-<li class=""><strong>Types</strong>: Shared interfaces for users, gyms, and events.</li>
+<li class=""><strong><code>@fitnexa/shared/types</code></strong>: Shared interfaces for users, gyms, and events.</li>
+<li class=""><strong><code>@fitnexa/shared/api</code></strong>: Platform-agnostic API clients.</li>
+<li class=""><strong><code>@fitnexa/shared/logger</code></strong>: Environment-aware logging (Console in browser, Winston in Node).</li>
+<li class=""><strong><code>@fitnexa/shared/middleware</code></strong>: Error handling, correlation IDs, performance monitoring.</li>
 </ul>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="-communication-patterns">📡 Communication Patterns<a href="#-communication-patterns" class="hash-link" aria-label="Direct link to 📡 Communication Patterns" title="Direct link to 📡 Communication Patterns" translate="no">​</a></h2>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="synchronous-rest">Synchronous (REST)<a href="#synchronous-rest" class="hash-link" aria-label="Direct link to Synchronous (REST)" title="Direct link to Synchronous (REST)" translate="no">​</a></h3>
