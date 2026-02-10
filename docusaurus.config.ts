@@ -15,13 +15,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://docs.fitnexa.dev',
+  // Set the production url of your site here
+  url: 'https://FitNexa.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
-  baseUrl: '/',
+  baseUrl: '/fitnexa-docs/',
 
   // GitHub pages deployment config.
   organizationName: 'FitNexa',
-  projectName: 'fitnexa-platform',
+  projectName: 'fitnexa-docs',
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
