@@ -14,6 +14,7 @@ Each service has a dedicated technical guide:
 | **[Content Service](services/CONTENT_SERVICE.md)** | 3004 | `fitnexa_content` | Workouts, Products, Blog |
 | **[Squad Service](services/SQUAD_SERVICE.md)** | 3005 | RAM / JSON | Live Workouts, Presence |
 | **[Identity Service](services/IDENTITY_SERVICE.md)** | 3007 | `fitnexa_identity` | Auth, Users, Roles |
+| **[Wizard Service](services/WIZARD_SERVICE.md)** | 3006 | Service-owned | Multi-step flows, onboarding sessions |
 | **[Messaging Service](services/MESSAGING_SERVICE.md)**| 3008 | `fitnexa_messaging` | Direct Chat, Redis Sync |
 | **[Logging Service](services/LOGGING_SERVICE.md)** | 3009 | `fitnexa_logs` | Central log sink |
 

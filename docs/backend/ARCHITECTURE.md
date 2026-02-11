@@ -28,6 +28,7 @@ To avoid code duplication, common logic is moved to a local shared package. It s
 - **`@fitnexa/shared/api`**: Platform-agnostic API clients.
 - **`@fitnexa/shared/logger`**: Environment-aware logging (Console in browser, Winston in Node).
 - **`@fitnexa/shared/middleware`**: Error handling, correlation IDs, performance monitoring.
+- **`@fitnexa/shared/server`**: **Backend-only** entry: `ConfigManager`, `createBaseService`, bootstrap, and Node-only config. All microservices import from `@fitnexa/shared/server` (via path mapping in `tsconfig.json`) so they do not pull browser-only code. See **[Shared Package](../SHARED_PACKAGE.md)** for full export reference.
 
 ## 📡 Communication Patterns
 

@@ -6,7 +6,7 @@ This guide documents the setup of the User Acceptance Testing (UAT) environment 
 
 -   **Backend**: Hosted on Hetzner Cloud (VPS).
     -   IP: `89.167.47.120` (HTTPS Enabled)
-    -   Services: Gateway, Identity, Gym, Nutrition, Content, Squad, Postgres (Dockerized).
+    -   Services: Gateway, Identity, Gym, Nutrition, Content, Squad, Wizard, Messaging, Logging, Postgres (Dockerized).
 -   **Frontend**: Hosted on Vercel.
     -   Gym Admin: `fitnexa-gym-admin-uat.vercel.app`
     -   Super Admin: `fitnexa-super-admin-uat.vercel.app`
@@ -39,13 +39,13 @@ File: `.github/workflows/deploy-backend.yml`
 -   Runs deployment script via SSH.
 
 ### B. FitNexa Admin (`fitnexa-admin`)
-File: `.github/workflows/deploy-admin.yml`
--   Checkouts `fitnexa-admin` and `fitnexa-shared`.
--   Installs Vercel CLI.
--   Deploys `gym-admin` and `super-admin` to Vercel using tokens.
+Workflows in `.github/workflows/`:
+-   **deploy-gym-admin.yml**: Deploys Gym Admin to Vercel.
+-   **deploy-super-admin.yml**: Deploys Super Admin to Vercel.
+-   Each checks out `fitnexa-admin` (and `fitnexa-shared` if needed), uses Vercel CLI and tokens to deploy the corresponding project.
 
 ### C. FitNexa Shared (`fitnexa-shared`)
-File: `.github/workflows/shared-ci.yml`
+File: `.github/workflows/shared-ci.yml` (or equivalent)
 -   Runs tests/checks to ensure shared library integrity.
 
 ## 4. Testing & Verification
@@ -59,10 +59,8 @@ npm run easy-test
 ```
 This interactive script allows you to:
 1.  **Select Environment**: Local (localhost) or UAT (https://89.167.47.120).
-2.  **Select Test Type**:
-    *   **Smoke Check**: Pings all microservice health endpoints.
-    *   **Integration Tests**: Runs the Jest suite against the selected target.
-    *   **Unit Tests**: Runs internal service logic tests.
+2.  **Select Test Mode**: Standard Run (plain `npm test` per service) or Coverage Report (`npm test -- --coverage`).
+3.  **Run**: Executes the test script for each backend service that has one (gateway, identity, gym, content, squad, nutrition, wizard, messaging, logging). Use this to verify unit tests locally or against UAT. For health checks and integration tests, use `npm run health-check` and `npm run test:integration` as needed.
 
 ### Manual Verification
 **Backend Health Check**:
