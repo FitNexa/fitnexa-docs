@@ -1,0 +1,10 @@
+# Dependencies and build artifacts (we run npm ci and build in the image)
+node_modules
+build
+.docusaurus
+.cache-loader
+*.log
+.git
+.gitignore
+*.md
+!README.md
