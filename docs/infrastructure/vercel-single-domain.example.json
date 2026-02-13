@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    { "source": "/admin", "destination": "https://fitnexa-super-admin-uat.vercel.app/admin" },
+    { "source": "/admin/:path*", "destination": "https://fitnexa-super-admin-uat.vercel.app/admin/:path*" },
+    { "source": "/gym", "destination": "https://fitnexa-gym-admin-uat.vercel.app/gym" },
+    { "source": "/gym/:path*", "destination": "https://fitnexa-gym-admin-uat.vercel.app/gym/:path*" }
+  ]
+}

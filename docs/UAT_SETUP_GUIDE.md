@@ -63,13 +63,15 @@ This interactive script allows you to:
 3.  **Run**: Executes the test script for each backend service that has one (gateway, identity, gym, content, squad, nutrition, wizard, messaging, logging). Use this to verify unit tests locally or against UAT. For health checks and integration tests, use `npm run health-check` and `npm run test:integration` as needed.
 
 ### Manual Verification
-**Backend Health Check**:
--   URL: `https://89.167.47.120/health` (or root)
+**Backend Health Check** (Option B: API on subdomain):
+-   URL: `https://api.uat.gymia.fit/health` (or root)
+-   Or by IP: `https://89.167.47.120/health` if still using fallback `:80` block
 -   Check Docker: `ssh root@89.167.47.120 "docker ps"`
 
 **Frontend Access**:
--   Gym Admin: https://fitnexa-gym-admin-uat.vercel.app
--   Super Admin: https://fitnexa-super-admin-uat.vercel.app
+-   Landing (after DNS): https://uat.gymia.fit (Vercel)
+-   Gym Admin: https://fitnexa-gym-admin-uat.vercel.app (or e.g. https://irontemple.uat.gymia.fit once configured)
+-   Super Admin: https://fitnexa-super-admin-uat.vercel.app (or https://admin.uat.gymia.fit once configured)
 
 ## 5. Troubleshooting
 
