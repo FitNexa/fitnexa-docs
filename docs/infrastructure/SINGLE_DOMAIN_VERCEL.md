@@ -24,7 +24,11 @@ You still need to: **(1)** Add DNS for `api.uat.gymia.fit` → your server IP, a
 
 ### Phase 2: DNS (where you manage uat.gymia.fit)
 
-Do this in your DNS provider (e.g. Cloudflare, Namecheap, Route53, etc.).
+You can either **keep DNS at your current provider** (Namecheap, etc.) and add records there, or **use Vercel nameservers** and manage all DNS in Vercel.
+
+#### Option A: Keep DNS at Namecheap (CNAME / A records)
+
+Do this in your DNS provider (e.g. Namecheap, Cloudflare, Route53).
 
 1. **Root domain (only if using Option B above)**  
    - Add the **A** and/or **CNAME** records that Vercel will show when you add `uat.gymia.fit` to the Landing project (Vercel Dashboard → Landing project → Settings → Domains → Add).  
@@ -40,7 +44,7 @@ Do this in your DNS provider (e.g. Cloudflare, Namecheap, Route53, etc.).
    - Add CNAME: **Name** `*` (wildcard; some providers use `*.uat.gymia.fit`), **Target** `cname.vercel-dns.com`.
 
 5. **Optional – onboarding subdomain**  
-   - If you want `onboard.uat.gymia.fit`: CNAME **Name** `onboard`, **Target** `cname.vercel-dns.com`.
+   - If you want `onboarding.uat.gymia.fit`: CNAME **Name** `onboarding`, **Target** `cname.vercel-dns.com`.
 
 6. **API (required for Option B) – so `api.uat.gymia.fit` reaches your backend**  
    - **If your DNS zone is `uat.gymia.fit`** (you manage records *under* uat.gymia.fit):  
@@ -52,6 +56,27 @@ Do this in your DNS provider (e.g. Cloudflare, Namecheap, Route53, etc.).
    - In both cases the result is: **api.uat.gymia.fit** → your backend (Caddy + gateway).
 
 Save DNS and wait a few minutes for propagation (can take up to 48h in rare cases).
+
+**Namecheap (zone = gymia.fit):** In **Domain List** → **gymia.fit** → **Manage** → **Advanced DNS**. Add a CNAME: **Host** = `uat` (only the subdomain; do not put `uat.gymia.fit`), **Value** = `cname.vercel-dns.com` (or the target Vercel shows). Leave "TTL" on Automatic. Save. The result must be that **uat.gymia.fit** resolves to Vercel.
+
+#### Option B: Use Vercel nameservers (manage DNS on Vercel)
+
+If you prefer to manage DNS on Vercel, change the nameservers at your **domain registrar** (where you bought gymia.fit, e.g. Namecheap) to:
+
+| Nameserver |
+|------------|
+| `ns1.vercel-dns.com` |
+| `ns2.vercel-dns.com` |
+
+**In Namecheap:** Domain List → **gymia.fit** → **Manage** → **Domain** → **Nameservers** → choose **Custom DNS** and enter the two Vercel nameservers above. Save.
+
+**In Vercel:** After propagation (minutes to 48h), add the domain **gymia.fit** in Vercel (Team or Project → Domains). Then you manage all records in Vercel:
+
+- **uat** (CNAME → `cname.vercel-dns.com` or let Vercel assign the project) so `uat.gymia.fit` → Landing.
+- **api.uat** (A record → your backend server IP, e.g. `89.167.47.120`) so `api.uat.gymia.fit` → backend.
+- **admin.uat**, **\*.uat** (wildcard), etc. as needed for Super Admin and Gym Admin.
+
+Vercel’s UI will show “Update the nameservers in your DNS provider…” and the two nameservers until you switch; after you switch, you configure the records in Vercel. [Learn more](https://vercel.com/docs/concepts/projects/domains#using-vercel-nameservers).
 
 ---
 
@@ -71,17 +96,21 @@ Save DNS and wait a few minutes for propagation (can take up to 48h in rare case
    - **Settings** → **Domains** → Add: `*.uat.gymia.fit` (wildcard).  
    - Leave `uat.gymia.fit` and `www.uat.gymia.fit` only on the Landing project.
 
-4. **Onboarding (if separate project)**  
-   - If you have a separate Onboarding project: add `onboard.uat.gymia.fit`.  
-   - If onboarding is a route inside the Landing app (e.g. `/onboarding`), you don’t need a separate domain.
+4. **Onboarding (separate Vercel project)**  
+   - Create a new Vercel project from the same repo; set **Root Directory** to `fitnexa-admin/onboarding`. Add domain `onboarding.uat.gymia.fit` and env `VITE_API_URL=https://api.uat.gymia.fit`.  
+   - Landing CTAs point to `https://onboarding.uat.gymia.fit` by default (e.g. `/onboarding`), you don’t need a separate domain.
 
 ---
 
+**Deploy admin apps (small upload):** From repo root: `npm run deploy:vercel:onboarding`, `deploy:vercel:gym-admin`, `deploy:vercel:super-admin`. Each bundles only that app + fitnexa-shared into `.vercel-deploy/<app>` and runs `vercel --prod`. `VERCEL_PROJECT=name` to override; `VERCEL_PRODUCTION=0` for preview.
+
+**Shared Vite dedupe (all three frontends):** `scripts/vite-dedupe.cjs` is the single source of truth for `resolve.dedupe` (avoids duplicate React/react-router-dom and related runtime errors). Onboarding, gym-admin, and super-admin load it via `createRequire`; the deploy script copies it into each bundle and inlines it for the generated onboarding config. To add another package to dedupe, edit only `scripts/vite-dedupe.cjs`.
+
 ### Phase 4: App configuration
 
-1. **Landing (and onboarding if same app)**  
+1. **Landing**  
    - Ensure the app is deployed and uses **`https://api.uat.gymia.fit`** for any API calls.  
-   - If onboarding is the same app, add a route like `/onboarding` and link to it from the landing page.
+   - CTA links point to **`https://onboarding.uat.gymia.fit`** (or set `VITE_ONBOARDING_URL` in Vercel env to override).
 
 2. **Super Admin**  
    - Set env (e.g. `VITE_API_URL`) to **`https://api.uat.gymia.fit`**.  
@@ -108,12 +137,37 @@ Save DNS and wait a few minutes for propagation (can take up to 48h in rare case
 
 ---
 
+### Troubleshooting: DNS_PROBE_FINISHED_NXDOMAIN
+
+If the browser shows "Impossibile raggiungere il sito" or "This site can't be reached" with **DNS_PROBE_FINISHED_NXDOMAIN**, the domain name does not resolve (no DNS record found). Check the following:
+
+1. **You must edit DNS for the parent domain**  
+   - For **uat.gymia.fit** the parent domain is **gymia.fit**. In Namecheap go to **Domain List** → **gymia.fit** → **Manage** → **Advanced DNS**. Do **not** create a separate "uat.gymia.fit" domain; the record is a **subdomain of gymia.fit**.
+
+2. **Exact CNAME for the landing**  
+   - **Type:** CNAME  
+   - **Host:** `uat` only (Namecheap will show it as "uat" or "uat.gymia.fit" in the list; the important thing is that the **resolved name** is **uat.gymia.fit**).  
+   - **Value:** `cname.vercel-dns.com` (or the exact target shown in Vercel → Project → Settings → Domains for uat.gymia.fit).  
+   - No typos, no `https://`, no trailing dot in Value.
+
+3. **Nameservers**  
+   - Confirm **gymia.fit** is using Namecheap's nameservers (e.g. `dns1.namecheap.com` / `dns2.namecheap.com`) so the records you add are actually used. If the domain uses another provider's nameservers, add the CNAME there instead.
+
+4. **Propagation**  
+   - After saving, wait 5–15 minutes and test again. In rare cases propagation can take up to 24–48 hours.  
+   - Check what the world sees: [https://dnschecker.org](https://dnschecker.org) → enter `uat.gymia.fit` and run. If it shows NXDOMAIN everywhere, the record is missing or wrong; if some locations resolve, wait for propagation.
+
+5. **Vercel**  
+   - In Vercel → your Landing project → **Settings** → **Domains**, ensure **uat.gymia.fit** is added and note the exact record (A or CNAME) and target Vercel shows; match that in Namecheap.
+
+---
+
 ## 1. Product flow (what we’re supporting)
 
 | Step | Where it lives | URL pattern |
 |------|----------------|-------------|
 | 1. Landing | Main marketing / entry | `https://uat.gymia.fit` |
-| 2. Onboarding | Sign up, create gym, etc. | `https://uat.gymia.fit/onboarding` (or `onboard.uat.gymia.fit`) |
+| 2. Onboarding | Sign up, create gym, etc. | `https://uat.gymia.fit/onboarding` (or `onboarding.uat.gymia.fit`) |
 | 3. Gym admin | One admin per gym, **each on its own subdomain** | `https://{gym-slug}.uat.gymia.fit` (e.g. `irontemple.uat.gymia.fit`, `greentheory.uat.gymia.fit`) |
 | 4. Super Admin | Platform-level (optional) | `https://admin.uat.gymia.fit` |
 | 5. Mobile app | Created/configured from gym admin; APK built per gym | Triggered from gym admin; app uses same API (e.g. `uat.gymia.fit`) |
@@ -187,10 +241,10 @@ Use `gymSlug` for API calls and for triggering the mobile app build for that gym
 
 If you prefer onboarding on its own subdomain:
 
-- **DNS:** CNAME `onboard.uat.gymia.fit` → `cname.vercel-dns.com`.
-- **Vercel:** Add `onboard.uat.gymia.fit` to the **Onboarding** project (or the same project that serves onboarding).
+- **DNS:** CNAME `onboarding.uat.gymia.fit` → `cname.vercel-dns.com`.
+- **Vercel:** Add `onboarding.uat.gymia.fit` to the **Onboarding** project (or the same project that serves onboarding).
 
-Then the flow is: Landing at `uat.gymia.fit` → redirect or link to `onboard.uat.gymia.fit` → after creation, redirect to `{gym-slug}.uat.gymia.fit`.
+Then the flow is: Landing at `uat.gymia.fit` → redirect or link to `onboarding.uat.gymia.fit` → after creation, redirect to `{gym-slug}.uat.gymia.fit`.
 
 ---
 
@@ -224,7 +278,7 @@ So: **one domain** for web (landing, onboarding, gym admin, super admin); **mobi
 | Need | Approach |
 |------|----------|
 | One brand domain | Use one root domain (e.g. `uat.gymia.fit`) for all web apps. |
-| Landing + onboarding | `uat.gymia.fit` + `uat.gymia.fit/onboarding` (or `onboard.uat.gymia.fit`). |
+| Landing + onboarding | `uat.gymia.fit` + `uat.gymia.fit/onboarding` (or `onboarding.uat.gymia.fit`). |
 | **Gym-based admin with a certain subdomain** | **Wildcard** `*.uat.gymia.fit` → one Gym Admin Vercel project; app resolves subdomain to gym slug and shows that tenant. |
 | Super Admin | `admin.uat.gymia.fit` → Super Admin project. |
 | Create mobile app from gym admin | Same backend/API; gym admin triggers per-gym build (e.g. `build:mobile:uat <gym-id>`); APK uses your API domain. |

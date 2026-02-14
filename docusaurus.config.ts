@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 // For UAT/domain deployment: DOCS_URL=https://uat.gymia.fit DOCS_BASE_URL=/docs/ npm run build
 
-const docsUrl = process.env.DOCS_URL || 'https://FitNexa.github.io';
-const docsBaseUrl = process.env.DOCS_BASE_URL || '/fitnexa-docs/';
+const docsUrl = process.env.DOCS_URL || 'http://docs.gymia.fit';
+const docsBaseUrl = process.env.DOCS_BASE_URL || '/';
 
 const config: Config = {
   title: 'FitNexa Developers',
