@@ -115,6 +115,7 @@ const sidebars: SidebarsConfig = {
       label: 'Features',
       items: [
         'features/third-party-integration',
+        'features/bug-reporting',
       ],
     },
   ],
