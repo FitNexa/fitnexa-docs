@@ -58,11 +58,11 @@ graph TD
 ## 🔄 Core Flows
 
 1. **Authentication**: Handled by the **Identity Service**. Users receive a JWT that is stored locally and sent with all subsequent requests. Supports domain-enforcement for gym-specific logins.
-2. **Onboarding Flow**: Gym registration via **Onboarding Wizard** → admin account creation → activation email → gym-specific configuration setup.
+2. **Onboarding Flow**: Landing page preview → Onboarding Wizard → backend orchestration (gym + admin + activation email) → account activation → Gym Admin dashboard → Gym Setup editor → UAT APK build via GitHub Actions → download and test. See [Gym Onboarding Flow](../features/gym-onboarding-flow.md) for full details.
 3. **Dynamic Branding**: The "Chameleon Engine" stores gym-specific themes (colors, logos, assets) in **GymConfig**. Frontend apps fetch this at runtime and inject styles as CSS variables or React context.
-4. **Wizard Flows**: The **Wizard Service** handles multi-step stateful flows (onboarding, feature setup), exposed via the gateway at `/wizard`.
+4. **Wizard Flows**: The **Wizard Service** handles multi-step stateful flows (onboarding, feature setup), exposed via the gateway at `/wizard`. It also manages account activation tokens, email delivery (SMTP via Nodemailer), and GitHub Actions build orchestration.
 5. **Observability**: Every service ships logs asynchronously via **RabbitMQ** to a dedicated **Logging Service**, which stores them in **MongoDB** for centralized analysis.
 
 ---
 
-Related: [Architecture Review](architecture-review.md) · [Backend Architecture](../backend/architecture.md) · [Frontend Overview](../frontend/overview.md)
+Related: [Architecture Review](architecture-review.md) · [Backend Architecture](../backend/architecture.md) · [Frontend Overview](../frontend/overview.md) · [Gym Onboarding Flow](../features/gym-onboarding-flow.md)
