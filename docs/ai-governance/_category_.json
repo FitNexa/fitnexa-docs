@@ -1,0 +1,9 @@
+{
+    "label": "AI Governance",
+    "position": 8,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Guidelines and decision logs for AI usage"
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "label": "Service Guides",
+    "position": 5,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Detailed guides for individual microservices"
+    }
+}

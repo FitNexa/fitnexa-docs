@@ -1,0 +1,9 @@
+{
+    "label": "Mobile App",
+    "position": 4,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "React Native and Expo mobile application documentation"
+    }
+}

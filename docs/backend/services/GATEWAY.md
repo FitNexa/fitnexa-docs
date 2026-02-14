@@ -1,33 +1,32 @@
-# API Gateway (Gatekeeper)
+---
+sidebar_position: 1
+title: "Gateway"
+description: "Central entry point and request router for the platform"
+---
+# API Gateway
 
 The API Gateway is the single point of entry for all client applications, providing a unified API surface and documentation hub.
 
 ## 🚀 Responsibilities
-- **Request Routing**: Proxying client requests to the correct downstream microservice.
-- **Documentation Aggregation**: Serving a unified Swagger/OpenAPI UI for all services.
-- **Service Discovery**: (Static) Mapping service routes (e.g., `/auth/*`) to internal ports (e.g., `3007`).
-- **Health Monitoring**: Providing a central liveness check for the whole cluster.
+- **Request Routing**: Proxying client requests to downstream microservices.
+- **Documentation Hub**: Consolidating Swagger/OpenAPI docs for all services.
+- **Rate Limiting**: Protecting downstream services from abuse.
 
 ## 🛠️ Technical Details
-- **Port**: 3000
-- **Technology**: Express.js + `http-proxy-middleware`.
-- **OpenAPI**: Consolidated YAML definitions.
+- **Port**: `3000`
+- **Path**: `http://localhost:3000`
+- **Hub**: `http://localhost:3000/api-docs`
 
 ## 📡 Proxy Map
-| Route | Service | Destination |
-|-------|---------|-------------|
-| `/identity/*` | Identity | `http://localhost:3007` |
-| `/gym/*` | Gym | `http://localhost:3002` |
-| `/nutrition/*` | Nutrition | `http://localhost:3003` |
-| `/content/*` | Content | `http://localhost:3004` |
-| `/squad/*` | Squad | `http://localhost:3005` |
-| `/messaging/*` | Messaging | `http://localhost:3008` |
-
-## 📖 API Documentation Hub
-The Gateway hosts the **Interactive API Documentation** at:
-`http://localhost:3000/api-docs`
-
-It aggregates individual service definitions to provide a seamless "one-stop-shop" for developers.
+| Route          | Service   | Destination             |
+| -------------- | --------- | ----------------------- |
+| `/identity/*`  | Identity  | `http://localhost:3007` |
+| `/gym/*`       | Gym       | `http://localhost:3002` |
+| `/nutrition/*` | Nutrition | `http://localhost:3004` |
+| `/content/*`   | Content   | `http://localhost:3003` |
+| `/squad/*`     | Squad     | `http://localhost:3005` |
+| `/wizard/*`    | Wizard    | `http://localhost:3008` |
+| `/messaging/*` | Messaging | `http://localhost:3006` |
 
 ---
-[Back to Services Catalog](../SERVICES_CATALOG.md)
+Related: [Services Catalog](../services-catalog.md) · [Backend Architecture](../architecture.md)

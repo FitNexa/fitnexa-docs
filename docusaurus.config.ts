@@ -2,9 +2,6 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
-// This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
-// For UAT/domain deployment: DOCS_URL=https://uat.gymia.fit DOCS_BASE_URL=/docs/ npm run build
-
 const docsUrl = process.env.DOCS_URL || 'http://docs.gymia.fit';
 const docsBaseUrl = process.env.DOCS_BASE_URL || '/';
 
@@ -13,20 +10,18 @@ const config: Config = {
   tagline: 'Technical documentation for the FitNexa Platform',
   favicon: 'img/favicon.ico',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
 
   url: docsUrl,
   baseUrl: docsBaseUrl,
 
-  // GitHub pages deployment config.
   organizationName: 'FitNexa',
   projectName: 'fitnexa-docs',
   trailingSlash: false,
 
-  onBrokenLinks: process.env.DOCS_BASE_URL === '/docs/' ? 'warn' : 'throw',
+  onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
 
   i18n: {
@@ -59,7 +54,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
       respectPrefersColorScheme: true,
@@ -92,14 +86,10 @@ const config: Config = {
         {
           title: 'Docs',
           items: [
-            {
-              label: 'System Overview',
-              to: '/docs/SYSTEM_OVERVIEW',
-            },
-            {
-              label: 'Backend Architecture',
-              to: '/docs/backend/ARCHITECTURE',
-            },
+            { label: 'System Overview', to: '/docs/overview/system-overview' },
+            { label: 'Backend Architecture', to: '/docs/backend/architecture' },
+            { label: 'Frontend Apps', to: '/docs/frontend/overview' },
+            { label: 'API Client', to: '/docs/frontend/api-client' },
           ],
         },
         {

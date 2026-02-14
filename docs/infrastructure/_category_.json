@@ -1,0 +1,9 @@
+{
+    "label": "Infrastructure",
+    "position": 6,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Cloud infrastructure, deployment, and observability"
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "label": "@fitnexa/shared",
+    "position": 5,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Shared packages and utilities used across the monorepo"
+    }
+}

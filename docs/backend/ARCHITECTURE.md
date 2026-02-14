@@ -1,50 +1,26 @@
-# Backend Architecture Deep Dive
+---
+sidebar_position: 1
+title: "Backend Architecture"
+description: "Technical deep-dive into the microservices ecosystem"
+---
+# Backend Architecture
 
-The FitNexa backend is a distributed system designed for scalability, isolation, and observability.
+The FitNexa backend is a microservices-based system built with Node.js, TypeScript, and Prisma.
 
-## 🛠️ Tech Stack
-- **Runtime**: Node.js (TypeScript)
-- **Framework**: Express.js
-- **Database**: PostgreSQL with Prisma ORM
-- **Messaging**: RabbitMQ (amqplib)
-- **Caching**: Redis (ioredis)
-- **Logging**: Winston + MongoDB
-- **Shared Library**: `@fitnexa/shared` (Custom internal package)
+## 🏗️ Structural Layers
+Every microservice follows a standardized directory structure:
+- `src/controllers/`: Request handling and response formatting.
+- `src/services/`: Core business logic and external integrations.
+- `src/repositories/`: Data access layer using Prisma.
+- `src/models/`: Zod schemas and TypeScript types.
 
-## 📦 Service Design Patterns
+## 📡 Communication
+- **Synchronous**: REST APIs via the Gateway.
+- **Asynchronous**: RabbitMQ for logging, webhooks, and background processing.
 
-### 1. Database per Service
-Each microservice owns its own database schema (e.g., `fitnexa_identity`, `fitnexa_gym`). This ensures that a schema change in one service never breaks another.
-
-### 2. API Gateway (Gatekeeper)
-The Gateway (Port 3000) acts as the single entry point. It handles:
-- **Routing**: Mapping client requests to downstream services.
-- **Health Monitoring**: Aggregating readiness/liveness of all services.
-- **Cross-Component Auth**: (Future) Centralized token validation.
-
-### 3. Shared Core Library (`@fitnexa/shared`)
-To avoid code duplication, common logic is moved to a local shared package. It supports **sub-path exports** for granular imports:
-- **`@fitnexa/shared/types`**: Shared interfaces for users, gyms, and events.
-- **`@fitnexa/shared/api`**: Platform-agnostic API clients.
-- **`@fitnexa/shared/logger`**: Environment-aware logging (Console in browser, Winston in Node).
-- **`@fitnexa/shared/middleware`**: Error handling, correlation IDs, performance monitoring.
-- **`@fitnexa/shared/server`**: **Backend-only** entry: `ConfigManager`, `createBaseService`, bootstrap, and Node-only config. All microservices import from `@fitnexa/shared/server` (via path mapping in `tsconfig.json`) so they do not pull browser-only code. See **[Shared Package](../SHARED_PACKAGE.md)** for full export reference.
-
-## 📡 Communication Patterns
-
-### Synchronous (REST)
-Used for immediate requests where a response is required (e.g., Login, Fetching Workouts).
-
-### Asynchronous (Events)
-Used for non-blocking operations to improve resilience and performance:
-- **Logging**: Services publish logs to the `logs` exchange in RabbitMQ.
-- **Cross-Service Sync**: (e.g., When a user is deleted in Identity, notify other services).
-
-### Real-time (WebSockets)
-Handled via `socket.io` in specific services like **Messaging** and **Squad Service** for instant notifications and chat.
+## 🔐 Security
+- **JWT**: Identity-based authentication.
+- **Domain Enforcement**: Gym-level isolation for admin accounts.
 
 ---
-
-## 🔗 Related Links
-- **[Services Catalog](SERVICES_CATALOG.md)** - Port mappings and specific logic.
-- **[Infrastructure Layout](../infrastructure/LOGGING_&_OBSERVABILITY.md)** - Details on RabbitMQ and Mongo.
+Related: [System Overview](../overview/system-overview.md) · [Service Catalog](services-catalog.md) · [Error Handling](error-handling.md)

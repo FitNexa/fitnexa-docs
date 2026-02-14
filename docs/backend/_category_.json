@@ -1,0 +1,9 @@
+{
+    "label": "Backend Services",
+    "position": 2,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Backend architecture and service documentation"
+    }
+}

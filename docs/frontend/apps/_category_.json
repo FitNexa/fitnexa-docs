@@ -1,0 +1,9 @@
+{
+    "label": "App Guides",
+    "position": 5,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Guides for specific frontend applications"
+    }
+}

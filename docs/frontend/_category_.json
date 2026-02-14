@@ -1,0 +1,9 @@
+{
+    "label": "Frontend Apps",
+    "position": 3,
+    "collapsed": true,
+    "link": {
+        "type": "generated-index",
+        "description": "Web applications and frontend architectural patterns"
+    }
+}
