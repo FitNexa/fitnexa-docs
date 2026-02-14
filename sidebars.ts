@@ -110,6 +110,13 @@ const sidebars: SidebarsConfig = {
         'production-readiness/roadmap',
       ],
     },
+    {
+      type: 'category',
+      label: 'Features',
+      items: [
+        'features/third-party-integration',
+      ],
+    },
   ],
 };
 

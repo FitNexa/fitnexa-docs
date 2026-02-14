@@ -1,0 +1,9 @@
+{
+    "label": "Features & Strategy",
+    "position": 10,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "description": "Feature roadmap, integration strategies, and product vision"
+    }
+}
