@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunkfitnexa_docs=globalThis.webpackChunkfitnexa_docs||[]).push([[1903],{1912(s){s.exports=JSON.parse('{"blogBasePath":"/fitnexa-docs/blog","blogTitle":"Blog","authorsListPath":"/fitnexa-docs/blog/authors"}')}}]);
