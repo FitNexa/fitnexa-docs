@@ -23,4 +23,4 @@ Developers should use the provided themed primitives instead of raw React Native
 - **`ScreenWrapper`**: Sets background gradients and status bar colors based on the current theme.
 
 ---
-Related: [Gym Service](../../backend/services/gym-service.md) · [Gym Admin](../../frontend/apps/gym-admin.md)
+Related: [Gym Service](../backend/services/gym-service) · [Gym Admin](../frontend/apps/gym-admin)

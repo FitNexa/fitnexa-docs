@@ -99,6 +99,17 @@ const sidebars: SidebarsConfig = {
         'ai-governance/decision-log',
       ],
     },
+    {
+      type: 'category',
+      label: 'Production Readiness',
+      items: [
+        'production-readiness/overview',
+        'production-readiness/security',
+        'production-readiness/stability',
+        'production-readiness/observability-quality',
+        'production-readiness/roadmap',
+      ],
+    },
   ],
 };
 

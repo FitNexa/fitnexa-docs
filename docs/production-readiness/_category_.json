@@ -1,0 +1,9 @@
+{
+    "label": "Production Readiness",
+    "position": 9,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "description": "Audit findings and hardening roadmap for production deployment"
+    }
+}

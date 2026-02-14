@@ -1,3 +1,8 @@
+---
+sidebar_position: 1
+title: "Logging & Observability"
+description: "Architecture of the platform's observability and telemetry systems"
+---
 # Logging & Observability
 
 FitNexa uses a centralized, asynchronous logging architecture to ensure platform stability and fast debugging.
@@ -37,5 +42,6 @@ db.logs.find({ correlationId: "X-CORR-1234" }).sort({ timestamp: 1 })
 ---
 
 ## 🔗 Related Links
-- **[Mobile Error Handling](../mobile/ERROR_HANDLING.md)**
-- **[System Overview](../SYSTEM_OVERVIEW.md)**
+- [Mobile Error Handling](../mobile/error-handling.md)
+- [Logging Service](../backend/services/logging-service.md)
+- [System Overview](../overview/system-overview.md)

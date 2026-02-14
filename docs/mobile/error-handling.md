@@ -1,32 +1,32 @@
-# Mobile Error Handling & Correlation
+---
+sidebar_position: 2
+title: "Error Handling"
+description: "Client-side error patterns and correlation for the mobile app"
+---
+# Mobile Error Handling
 
-To ensure high-quality support and fast debugging in a distributed system, the mobile app uses a sophisticated error correlation strategy.
+The mobile app implements a multi-layer error handling strategy to provide a graceful user experience and detailed telemetry.
 
-## 🛡️ Global Error Boundary
+## 🛡️ Boundary layers
+1. **Global Error Boundary**: Catches unhandled React component crashes.
+2. **API Interceptors**: Catch 401 (Unauthorized), 403 (Forbidden), and 500 (Server Error) responses.
+3. **Validation Errors**: Catch Zod validation failures before data reaches the API.
 
-The app is wrapped in a `GlobalErrorBoundary` component (`src/components/ui/GlobalErrorBoundary.tsx`).
+## 📡 Correlation & Logging
+When an error occurs, the app:
+1. Generates a `correlationId`.
+2. Appends the current device state (OS, Version, Memory).
+3. Ships the log to the **Logging Service**.
 
-### Features:
-1. **Crash Capture**: It catches any unhandled JavaScript exceptions in the React tree.
-2. **Correlation ID (Reference Code)**: When a crash occurs, it generates a unique "Reference Code".
-3. **Centralized Reporting**: The crash details, including the stack trace and device info, are sent to the **Logging Service** asynchronously.
-4. **User Feedback**: The user sees a friendly error screen with the Reference Code, making it easy to report issues to support.
-
-## 🚢 Logging Utility
-
-The `logger.ts` utility (`src/utils/logger.ts`) provides a standard way to ship logs from the client to the backend.
-
-### Log Levels:
-- **INFO**: Standard app lifecycle events.
-- **WARN**: Unexpected states that aren't crashes.
-- **ERROR**: Critical failures.
-
-### Log Sink:
-All mobile logs are sent via `POST` to `http://<gateway-url>:3009/logs`.
+## 🚀 Usage in Hooks
+Wrap API calls in standardized error handlers:
+```typescript
+try {
+  await ApiClient.get('/gym/locations');
+} catch (error) {
+  handleApiError(error); // Shows toast & logs telemetry
+}
+```
 
 ---
-
-## 🔍 How to Debug
-1. Get the **Reference Code** from the user.
-2. Search the **MongoDB** `logs` collection for that code.
-3. Trace the error across services using the same `correlationId`.
+Related: [Mobile Mechanics](mechanics) · [Backend Error Handling](../backend/error-handling)
