@@ -82,7 +82,7 @@ UAT APK builds are triggered from the gym admin dashboard and run via GitHub Act
 | `GITHUB_TOKEN` | PAT with repo scope for triggering builds |
 | `GITHUB_REPO_OWNER` | GitHub org (default: FitNexa) |
 | `GITHUB_REPO_NAME` | Mobile repo (default: fitnexa-mobile) |
-| `SMTP_PASS` | SMTP password for sending activation emails |
+| `MJ_APIKEY_PUBLIC`, `MJ_APIKEY_PRIVATE` | Mailjet API keys for sending activation emails |
 
 ## Frontend Deployment
 

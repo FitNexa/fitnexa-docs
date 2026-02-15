@@ -91,18 +91,18 @@ The `OnboardingOrchestrator` executes the following in order:
 2. **Create admin user** via `IdentityServiceClient.createGymAdmin()` with status `INACTIVE`
 3. **Generate activation token** (random 64-char hex, 24h expiry)
 4. **Create wizard session** (persists all onboarding data as JSON)
-5. **Send activation email** via `NodemailerEmailService` (SMTP)
+5. **Send activation email** via `MailjetEmailService` (Mailjet API)
 
 If admin creation fails, the orchestrator compensates by deleting the gym (saga pattern).
 
 ### Email Service
 
-The `NodemailerEmailService` uses Nodemailer to send two types of emails:
+The `MailjetEmailService` uses the Mailjet API to send two types of emails:
 
 - **Activation email**: Contains a styled HTML button linking to the activation page
 - **Welcome email**: Sent after activation, links to the gym admin dashboard
 
-When the `SMTP_PASS` env var is not set, the service falls back to `MockEmailService` which logs to console.
+When `MJ_APIKEY_PUBLIC` and `MJ_APIKEY_PRIVATE` (Mailjet) are not set, the service falls back to `MockEmailService` which logs to console.
 
 ### GitHub Build Service
 
@@ -194,11 +194,9 @@ The gym admin polling picks up the status change and shows the download button.
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `SMTP_HOST` | For email | SMTP server host (default: smtp.sendgrid.net) |
-| `SMTP_PORT` | For email | SMTP port (default: 587) |
-| `SMTP_USER` | For email | SMTP username (default: apikey) |
-| `SMTP_PASS` | For email | SMTP password / API key. If unset, falls back to mock. |
-| `SMTP_FROM` | For email | Sender address (default: FitNexa noreply@gymia.fit) |
+| `MJ_APIKEY_PUBLIC` | For email | Mailjet API key (public) |
+| `MJ_APIKEY_PRIVATE` | For email | Mailjet API secret (private). If either key is unset, falls back to mock. |
+| `MJ_FROM` | For email | Sender address (default: FitNexa &lt;noreply@gymia.fit&gt;) |
 | `GITHUB_TOKEN` | For builds | GitHub PAT with repo scope. If unset, falls back to mock. |
 | `GITHUB_REPO_OWNER` | No | GitHub org (default: FitNexa) |
 | `GITHUB_REPO_NAME` | No | Repo containing uat-build.yml (default: fitnexa-mobile) |

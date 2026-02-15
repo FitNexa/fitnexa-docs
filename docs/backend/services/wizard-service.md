@@ -1,4 +1,4 @@
-﻿---
+---
 sidebar_position: 7
 title: "Wizard Service"
 description: "Multi-step state machine for onboarding, activation, and build orchestration"
@@ -14,7 +14,7 @@ The Wizard Service manages long-running, multi-step state machines for gym onboa
 - **Validation**: Enforcing business rules before advancing steps.
 - **Onboarding Orchestration**: Coordinating with Identity Service and Gym Service to create gyms and admin accounts.
 - **Account Activation**: Managing activation tokens and password setup flow.
-- **Email Delivery**: Sending activation and welcome emails via SMTP (Nodemailer).
+- **Email Delivery**: Sending activation and welcome emails via Mailjet API.
 - **Build Management**: Triggering GitHub Actions to produce branded APK builds and tracking their status.
 
 ## Technical Details
@@ -36,7 +36,7 @@ wizard-service/
       WizardSessionService.ts    # CRUD for wizard sessions
       ActivationTokenService.ts  # Token generation and validation
       BuildRequestService.ts     # Build lifecycle management
-      NodemailerEmailService.ts  # Real SMTP email via Nodemailer
+      MailjetEmailService.ts     # Real email via Mailjet API
       MockEmailService.ts        # Console-logged email for dev
       GitHubBuildService.ts      # Trigger builds via GitHub API
       MockBuildService.ts        # Logged build trigger for dev
@@ -90,12 +90,13 @@ wizard-service/
 
 ## Service Implementations
 
-### NodemailerEmailService
+### MailjetEmailService
 
 Uses the `nodemailer` package. Configured via environment variables:
 
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`
-- When `SMTP_PASS` is not set, `MockEmailService` is used instead (logs to console).
+- `MJ_APIKEY_PUBLIC`, `MJ_APIKEY_PRIVATE` (Mailjet API keys)
+- `MJ_FROM` (optional, sender address)
+- When Mailjet keys are not set, `MockEmailService` is used instead (logs to console).
 
 Sends two email types:
 

@@ -14,7 +14,7 @@ This document lists every external service used by the FitNexa platform and the 
 
 | Service | Purpose | Required For | Fallback |
 |---------|---------|--------------|----------|
-| **SendGrid** (SMTP) | Activation & welcome emails | Wizard service | MockEmailService (logs to console) |
+| **Mailjet** | Activation & welcome emails | Wizard service | MockEmailService (logs to console) |
 | **GitHub** | Trigger UAT APK builds | Wizard service | MockBuildService |
 | **Stripe** | Go Live checkout / production licensing | Wizard service | MockPaymentService |
 | **Google Gemini** | AI food scanning (Nutrition) | Nutrition service | — |
@@ -23,7 +23,7 @@ This document lists every external service used by the FitNexa platform and the 
 
 ---
 
-## 1. SendGrid (SMTP) – Email Delivery
+## 1. Mailjet – Email Delivery
 
 **Used by:** Wizard service  
 **Purpose:** Sending activation emails and welcome emails during gym onboarding.
@@ -32,22 +32,21 @@ This document lists every external service used by the FitNexa platform and the 
 
 | Variable | Required | Description | Example |
 |----------|----------|-------------|---------|
-| `SMTP_HOST` | No | SMTP server host | `smtp.sendgrid.net` (default) |
-| `SMTP_PORT` | No | SMTP port | `587` (default) |
-| `SMTP_USER` | No | SMTP username (SendGrid: use `apikey`) | `apikey` |
-| `SMTP_PASS` | **Yes** | SMTP password / API key | Your SendGrid API key |
-| `SMTP_FROM` | No | Sender address | `FitNexa <noreply@gymia.fit>` |
+| `MJ_APIKEY_PUBLIC` | **Yes** | Mailjet API key (public) | From Mailjet dashboard |
+| `MJ_APIKEY_PRIVATE` | **Yes** | Mailjet API secret (private) | From Mailjet dashboard |
+| `MJ_FROM` | No | Sender address | `FitNexa <noreply@gymia.fit>` |
 
-### How to Get the Key
+### How to Get the Keys
 
-1. Sign up at [sendgrid.com](https://sendgrid.com)
-2. Go to **Settings → API Keys**
-3. Create an API key with **Mail Send** permission
-4. Copy the key and set `SMTP_PASS`
+1. Sign up at [mailjet.com](https://www.mailjet.com)
+2. Go to [Account → API Keys](https://app.mailjet.com/account/api_keys)
+3. Copy the **API Key** (public) → `MJ_APIKEY_PUBLIC`
+4. Copy the **Secret Key** (private) → `MJ_APIKEY_PRIVATE`
+5. Ensure your sender email/domain is verified in Mailjet (Account → Sender addresses & domains)
 
 ### Fallback
 
-If `SMTP_PASS` is not set, the Wizard service uses `MockEmailService`, which logs emails to the console instead of sending them.
+If `MJ_APIKEY_PUBLIC` or `MJ_APIKEY_PRIVATE` is not set, the Wizard service uses `MockEmailService`, which logs emails to the console instead of sending them.
 
 ---
 
@@ -198,8 +197,8 @@ For CI/CD, use `EXPO_TOKEN` (token from [expo.dev/settings/access-tokens](https:
 | Environment | Services You Need | Keys Required |
 |-------------|-------------------|---------------|
 | **Local dev** | None | None (mocks used for email, builds, payments) |
-| **UAT (testing)** | SendGrid, GitHub | `SMTP_PASS`, `GITHUB_TOKEN` |
-| **Production** | SendGrid, GitHub, Stripe, Vercel, EAS | All of the above + Stripe keys, Vercel token, Expo token |
+| **UAT (testing)** | Mailjet, GitHub | `MJ_APIKEY_PUBLIC`, `MJ_APIKEY_PRIVATE`, `GITHUB_TOKEN` |
+| **Production** | Mailjet, GitHub, Stripe, Vercel, EAS | All of the above + Stripe keys, Vercel token, Expo token |
 
 ---
 
