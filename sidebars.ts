@@ -80,6 +80,7 @@ const sidebars: SidebarsConfig = {
         'infrastructure/logging-observability',
         'infrastructure/single-domain-vercel',
         'infrastructure/uat-setup',
+        'infrastructure/third-party-services-and-keys',
       ],
     },
     {
