@@ -9,6 +9,9 @@ const sidebars: SidebarsConfig = {
         'overview/system-overview',
         'overview/architecture-review',
         'overview/quick-start',
+        'overview/architecture-audit',
+        'overview/implementation-summary',
+        'overview/business-functionality',
       ],
     },
     {
@@ -78,15 +81,18 @@ const sidebars: SidebarsConfig = {
       label: 'Infrastructure',
       items: [
         'infrastructure/logging-observability',
+        'infrastructure/error-reporting-and-github-tickets',
         'infrastructure/single-domain-vercel',
         'infrastructure/uat-setup',
         'infrastructure/third-party-services-and-keys',
+        'infrastructure/provider-integration-guide',
       ],
     },
     {
       type: 'category',
       label: 'Developer Guide',
       items: [
+        'dev-workflows/development-guide',
         'dev-workflows/contributing',
         'dev-workflows/monorepo-scripts',
         'dev-workflows/environment-setup',
@@ -117,6 +123,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'features/third-party-integration',
         'features/bug-reporting',
+        'features/iron-template',
       ],
     },
   ],

@@ -38,7 +38,6 @@ wizard-service/
       BuildRequestService.ts     # Build lifecycle management
       MailjetEmailService.ts     # Real email via Mailjet API
       MockEmailService.ts        # Console-logged email for dev
-      GitHubBuildService.ts      # Trigger builds via GitHub API
       MockBuildService.ts        # Logged build trigger for dev
     repositories/
       WizardSessionRepository.ts
@@ -103,7 +102,6 @@ Sends two email types:
 1. **Activation email** - branded HTML with activation button
 2. **Welcome email** - links to the gym admin dashboard
 
-### GitHubBuildService
 
 Uses `@octokit/rest` to dispatch `uat-build-request` events to GitHub Actions.
 

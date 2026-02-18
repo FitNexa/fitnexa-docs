@@ -106,7 +106,6 @@ When `MJ_APIKEY_PUBLIC` and `MJ_APIKEY_PRIVATE` (Mailjet) are not set, the servi
 
 ### GitHub Build Service
 
-The `GitHubBuildService` uses `@octokit/rest` to trigger GitHub Actions via `repository_dispatch` events. When `GITHUB_TOKEN` is not set, the service falls back to `MockBuildService`.
 
 ## Step 4 - Account Activation
 
@@ -157,7 +156,6 @@ The **WizardReview** component lets the admin:
 
 ### Trigger
 
-`POST /wizard/builds/request` creates a `BuildRequest` record and calls `GitHubBuildService.triggerUatBuild()`, which fires a GitHub Actions `repository_dispatch` event with a payload containing:
 
 - `gymId` - target gym identifier
 - `buildId` - unique build request ID
