@@ -54,6 +54,13 @@ Services map the path in `tsconfig.json`:
 }
 ```
 
+### ESM and .js imports
+The shared package is built as ESM. All **relative** imports in `fitnexa-shared/src/` must use the `.js` extension (e.g. `from './validation/index.js'`, `from '../types/gym.js'`) so Node resolves them correctly after compilation. See [Monorepo Scripts – ESM Module Resolution](../dev-workflows/monorepo-scripts.md#esm-module-resolution-fitnexa-shared) and [Recent Changes](../dev-workflows/recent-changes.md) for details and the rule for new code.
+
+### Building and testing
+- **Build:** `npm run build` (from `fitnexa-shared/`) runs `tsc` and copies i18n locales.
+- **Tests:** `npm test` runs Jest. Test files import without `.js`; `jest.config.js` maps `.js` to the `.ts` source so both production code and tests resolve correctly.
+
 ## 📱 Mobile usage
 
 The mobile app imports from `@fitnexa/shared/api`, `@fitnexa/shared/types`, and `@fitnexa/shared/lib/utils`. It must **never** import from `@fitnexa/shared/server`.

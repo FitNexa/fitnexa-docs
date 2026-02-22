@@ -96,6 +96,7 @@ const sidebars: SidebarsConfig = {
         'dev-workflows/contributing',
         'dev-workflows/monorepo-scripts',
         'dev-workflows/environment-setup',
+        'dev-workflows/recent-changes',
       ],
     },
     {

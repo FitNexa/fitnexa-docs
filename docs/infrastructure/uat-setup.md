@@ -37,12 +37,24 @@ Backend services are deployed to the VPS via GitHub Actions using the `deploy-ba
 
 ### Deploy Script
 
-The `scripts/deploy-uat.sh` script runs on the VPS and performs the following:
+The `scripts/deploy-uat.sh` script runs on the VPS and produces **timestamped, step-by-step logs** for easier debugging. It:
 
-1. Verifies that `docker-compose.uat.deploy.yml` exists in `fitnexa-backend/`
-2. Checks for `.env.uat` in `fitnexa-backend/` (warns if missing)
-3. Runs `docker compose up -d --build --remove-orphans`
-4. Displays container status after deployment
+1. **Step 1/5 – Check configuration**  
+   Verifies `docker-compose.uat.deploy.yml` and `fitnexa-backend/.env.uat` (warns if `.env.uat` is missing).
+
+2. **Step 2/5 – Remove conflicting containers**  
+   Force-removes any leftover static UAT containers (e.g. `fitnexa-uat-gateway`, `fitnexa-loki`, postgres, caddy, mongo, rabbitmq, redis) to avoid "container name already in use" on re-deploy.
+
+3. **Step 3/5 – Build and start**  
+   Runs `docker compose -f ... up -d --build --remove-orphans` using `fitnexa-backend/docker-compose.uat.deploy.yml` and `fitnexa-backend/.env.uat`.
+
+4. **Step 4/5 – Wait and show status**  
+   Waits 30s, then prints `docker compose ps -a`, warns if any container is unhealthy, and prints the last 30 lines of logs per service (backend services plus **loki**, **alloy**, **grafana** when using the deploy compose).
+
+5. **Step 5/5 – Gateway health**  
+   Polls `GATEWAY_URL/health` (default `http://localhost:3000`) until healthy or timeout, then prunes unused images and prints a short summary (gateway URL, firewall reminder for 80/443).
+
+Every log line is prefixed with `[YYYY-MM-DD HH:MM:SS]`. If a deploy fails, check the step where it stopped and the per-service logs for that run.
 
 ### CI/CD Workflow
 
@@ -58,10 +70,8 @@ The `deploy-backend.yml` GitHub Actions workflow:
 
 | Secret | Description |
 |--------|-------------|
-| `VPS_HOST` | VPS IP address or hostname |
-| `VPS_USER` | SSH username |
-| `VPS_SSH_KEY` | SSH private key for deployment |
-| `VPS_PATH` | Deployment directory on VPS |
+| `SSH_HOST` | VPS IP address or hostname (e.g. for `root@$SSH_HOST`) |
+| `SSH_PRIVATE_KEY` | SSH private key for deployment (e.g. ed25519); written as `~/.ssh/id_ed25519` in the workflow |
 
 ## Mobile App Builds
 
@@ -90,4 +100,4 @@ Frontend applications are deployed to Vercel automatically on push to the `main`
 
 ---
 
-Related: [Single Domain Vercel](single-domain-vercel.md) | [Environment Variables](../dev-workflows/environment-setup.md) | [Gym Onboarding Flow](../features/gym-onboarding-flow.md)
+Related: [Single Domain Vercel](single-domain-vercel.md) | [Environment Variables](../dev-workflows/environment-setup.md) | [Gym Onboarding Flow](../features/gym-onboarding-flow.md) | [Recent Changes](../dev-workflows/recent-changes.md) (deploy script and ESM fixes)

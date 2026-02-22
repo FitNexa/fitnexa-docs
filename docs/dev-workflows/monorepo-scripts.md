@@ -32,12 +32,13 @@ FitNexa uses a unified script system in the root `package.json` to manage the mu
 
 ### deploy-uat.sh
 
-The deployment script is executed on the VPS by the GitHub Actions `deploy-backend.yml` workflow. It:
+The deployment script is executed on the VPS by the GitHub Actions `deploy-backend.yml` workflow. It uses **timestamped, step-by-step logging** (see [UAT Setup – Deploy Script](../infrastructure/uat-setup.md#deploy-script) for the full sequence). In short it:
 
-1. Locates `docker-compose.uat.deploy.yml` in the `fitnexa-backend/` directory
-2. Loads environment variables from `fitnexa-backend/.env.uat`
+1. Checks that `docker-compose.uat.deploy.yml` and `fitnexa-backend/.env.uat` exist
+2. Removes conflicting static UAT containers
 3. Runs `docker compose up -d --build --remove-orphans`
-4. Reports container status
+4. Waits 30s, prints container status and **per-service logs** (last 30 lines each, including loki/alloy/grafana), and warns if any container is unhealthy
+5. Verifies gateway health at `GATEWAY_URL/health`, prunes images, and prints a short summary
 
 The script expects the following directory structure on the VPS:
 
@@ -53,20 +54,28 @@ The script expects the following directory structure on the VPS:
     deploy-uat.sh
 ```
 
-## ESM Module Resolution
+## ESM Module Resolution (@fitnexa/shared)
 
-The `@fitnexa/shared` package uses ES Modules. All relative imports in TypeScript source files must include the `.js` extension to ensure Node.js can resolve them at runtime after compilation:
+The `@fitnexa/shared` package uses ES Modules. Node ESM **does not** add file extensions, so all relative imports in TypeScript source must use the **`.js`** extension (for the emitted file). This applies to:
+
+- Barrel files: `src/types/index.ts`, `src/validation/index.ts`, `src/errors/index.js`, etc.
+- Server, config, middleware, services, interfaces, and any file that uses `from './...'` or `from '../...'`
 
 ```typescript
-// Correct
+// Correct – Node resolves .../config-manager.js at runtime
 import { ConfigManager } from '../config/config-manager.js';
+export * from './base.js';
+export * from './gym.js';
 
-// Incorrect (will cause ERR_MODULE_NOT_FOUND at runtime)
+// Incorrect – causes ERR_MODULE_NOT_FOUND at runtime
 import { ConfigManager } from '../config/config-manager';
+export * from './base';
 ```
 
-This applies to all files in `fitnexa-shared/src/` including server exports, middleware, utilities, and type re-exports.
+**Tests:** Jest runs against `.ts` source. Test files may import without `.js`. The shared package’s `jest.config.js` uses `moduleNameMapper` so that when production code imports `'../errors/index.js'`, Jest resolves it to the `.ts` file.
+
+For a full list of ESM-related changes and deploy fixes, see [Recent Changes](recent-changes.md).
 
 ---
 
-Related: [Quick Start](../overview/quick-start.md) | [Environment Variables](environment-setup.md) | [UAT Setup](../infrastructure/uat-setup.md)
+Related: [Quick Start](../overview/quick-start.md) | [Environment Variables](environment-setup.md) | [UAT Setup](../infrastructure/uat-setup.md) | [Recent Changes](recent-changes.md)
