@@ -31,6 +31,7 @@ const sidebars: SidebarsConfig = {
             'backend/services/gym-service',
             'backend/services/content-service',
             'backend/services/nutrition-service',
+            'backend/services/gym-tracker-service',
             'backend/services/squad-service',
             'backend/services/messaging-service',
             'backend/services/logging-service',
